@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -28,6 +28,21 @@ def contact():
     if not contact:
         return "noo contacts"
     return render_template('contact.html', phno=contact.number, name=contact.name)
+
+@app.route('/addContact', methods=['GET', 'POST'])
+def add_contact():
+    if request.method == "GET":
+        return render_template('add_contact.html')
+    if request.method == "POST":
+        data = request.form
+        name = data.get('name')
+        number = data.get('number')
+        if not name or not number:
+            return "Please provide both name and number", 400
+        contact = Contact(name=name, number=number)
+        db.session.add(contact)
+        db.session.commit()
+        return "Contact added successfully", 201
 
 if __name__ == "__main__":
     app.run()
