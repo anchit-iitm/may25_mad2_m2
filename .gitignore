@@ -2,3 +2,7 @@
 instance
 __pycache__
 .vscode
+.gitignore
+*.pyc
+*.pyo
+*.pyd
